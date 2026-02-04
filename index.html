@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZedBee | Device Configuration</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div id="app">
+        <!-- Navigation Sidebar/Header -->
+        <nav id="main-nav" class="hidden">
+            <div class="brand">
+                <img src="assets/img/logo.jpg" alt="ZedBee Logo" class="logo-img">
+                <h1>ZedBee</h1>
+            </div>
+            <ul class="nav-links">
+                <li data-target="home" class="active">Home</li>
+                <li data-target="device">Device</li>
+                <li data-target="protocol">Protocol</li>
+                <li data-target="connections">Connections</li>
+                <li data-target="settings">Settings</li>
+            </ul>
+            <div class="user-profile">
+                <span id="user-display">User</span>
+                <button id="logout-btn" class="btn-sm btn-outline">Logout</button>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main id="main-content">
+
+            <!-- LOGIN VIEW -->
+            <section id="view-login" class="view active">
+                <div class="auth-page liquid-bg">
+                    <div class="auth-card">
+                        <!-- Left Side: Branding -->
+                        <div class="auth-branding">
+                            <div class="brand-logo-large">
+                                <img src="assets/img/logo.jpg" alt="ZedBee Logo" class="logo-img-login">
+                                <div>
+                                    <h1 class="brand-name-login">ZedBee</h1>
+                                    <p class="brand-tagline">TECHNOLOGIES</p>
+                                </div>
+                            </div>
+                            <div class="login-hero-text">
+                                <h2>CONNECT.</h2>
+                                <h2>CONFIGURE.</h2>
+                                <h2>CONTROL.</h2>
+                            </div>
+                            <p class="login-description">Secure access to ZedBee device configuration and monitoring
+                                platform.</p>
+                        </div>
+
+                        <!-- Right Side: Sign In Form -->
+                        <div class="auth-form-wrapper">
+                            <div class="auth-form-content">
+                                <h2 class="auth-title">Sign in</h2>
+                                <form id="login-form">
+                                    <div class="form-group">
+                                        <label>Username</label>
+                                        <input type="text" id="login-user" placeholder="Enter username" required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <div class="password-group">
+                                            <input type="password" id="login-pass" placeholder="Enter password"
+                                                required />
+                                            <button type="button" class="password-toggle"
+                                                onclick="window.togglePassword(this)">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                    <circle cx="12" cy="12" r="3"></circle>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="forgot-password-link">
+                                        <a href="#" id="forgot-password">Forgot password?</a>
+                                    </div>
+                                    <p id="login-error" class="error-msg hidden">Invalid credentials. Please try again.
+                                    </p>
+                                    <div class="auth-actions">
+                                        <button type="submit" class="btn-auth">LOGIN</button>
+                                        <button type="button" id="login-to-signup" class="btn-auth btn-secondary">SIGN
+                                            UP</button>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SIGNUP VIEW -->
+            <section id="view-signup" class="view hidden">
+                <div class="auth-page liquid-bg">
+                    <div class="auth-card">
+                        <!-- Left Side: Branding -->
+                        <div class="auth-branding">
+                            <div class="brand-logo-large">
+                                <img src="assets/img/logo.jpg" alt="ZedBee Logo" class="logo-img-login">
+                                <div>
+                                    <h1 class="brand-name-login">ZedBee</h1>
+                                    <p class="brand-tagline">TECHNOLOGIES</p>
+                                </div>
+                            </div>
+                            <div class="login-hero-text">
+                                <h2>JOIN.</h2>
+                                <h2>CREATE.</h2>
+                                <h2>CONFIG.</h2>
+                            </div>
+                            <p class="login-description">Sign up for a ZedBee account to start configuring your
+                                industrial
+                                devices.</p>
+                        </div>
+
+                        <!-- Right Side: Sign Up Form -->
+                        <div class="auth-form-wrapper">
+                            <div class="auth-form-content">
+                                <h2 class="auth-title">Sign Up</h2>
+                                <form id="signup-form">
+                                    <div class="form-group">
+                                        <label>Username</label>
+                                        <input type="text" id="signup-user" placeholder="Choose a username" required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <div class="password-group">
+                                            <input type="password" id="signup-pass" placeholder="Create a password"
+                                                required />
+                                            <button type="button" class="password-toggle"
+                                                onclick="window.togglePassword(this)">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                    <circle cx="12" cy="12" r="3"></circle>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Confirm Password</label>
+                                        <div class="password-group">
+                                            <input type="password" id="signup-confirm-pass"
+                                                placeholder="Confirm your password" required />
+                                            <button type="button" class="password-toggle"
+                                                onclick="window.togglePassword(this)">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                    <circle cx="12" cy="12" r="3"></circle>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <p id="signup-error" class="error-msg hidden">Signup failed. Please try again.</p>
+                                    <p id="signup-success" class="success-msg hidden">Account created! Redirecting to
+                                        login...</p>
+                                    <button type="submit" class="btn-auth">SIGN UP</button>
+                                </form>
+                                <div class="auth-extra-links">
+                                    <p>Already have an account? <a href="#" id="back-to-login-from-signup">Sign in</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PASSWORD RESET VIEW -->
+            <section id="view-reset-password" class="view hidden">
+                <div class="auth-page liquid-bg">
+                    <div class="auth-card">
+                        <!-- Left Side: Branding (Same as Login) -->
+                        <div class="auth-branding">
+                            <div class="brand-logo-large">
+                                <img src="assets/img/logo.jpg" alt="ZedBee Logo" class="logo-img-login">
+                                <div>
+                                    <h1 class="brand-name-login">ZedBee</h1>
+                                    <p class="brand-tagline">TECHNOLOGIES</p>
+                                </div>
+                            </div>
+                            <div class="login-hero-text">
+                                <h2>SECURE.</h2>
+                                <h2>RECOVER.</h2>
+                                <h2>RESTORE.</h2>
+                            </div>
+                            <p class="login-description">Follow the steps to securely reset your account password.</p>
+                        </div>
+
+                        <!-- Right Side: Reset Form -->
+                        <div class="auth-form-wrapper">
+                            <div class="auth-form-content">
+                                <h2 class="auth-title">Reset Password</h2>
+                                <form id="reset-password-form">
+                                    <div class="form-group">
+                                        <label>Username</label>
+                                        <input type="text" id="reset-username" placeholder="Enter username" required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>New Password</label>
+                                        <div class="password-group">
+                                            <input type="password" id="reset-new-password"
+                                                placeholder="Enter new password" required />
+                                            <button type="button" class="password-toggle"
+                                                onclick="window.togglePassword(this)">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                    <circle cx="12" cy="12" r="3"></circle>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <p id="reset-error" class="error-msg hidden">User not found or error occurred.</p>
+                                    <p id="reset-success" class="success-msg hidden">Password updated successfully!</p>
+                                    <button type="submit" class="btn-auth">SAVE PASSWORD</button>
+                                </form>
+                                <div class="back-to-login">
+                                    <a href="#" id="back-to-login">Back to login</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HOME VIEW -->
+            <section id="view-home" class="view hidden">
+                <div class="home-container">
+                    <!-- Hero Section -->
+                    <div class="home-hero">
+                        <div class="hero-badge">
+                            <span class="badge-icon">⚡</span>
+                            <span>Industrial IoT Configuration</span>
+                        </div>
+                        <h1 class="hero-title">Welcome to ZedBee</h1>
+                        <p class="hero-subtitle">Configure your industrial devices in three simple steps. Click any card
+                            to begin your setup journey.</p>
+                    </div>
+
+                    <!-- Interactive Navigation Cards -->
+                    <div class="home-steps-grid">
+                        <!-- Step 1: Device -->
+                        <div class="home-step-card" onclick="window.router.navigate('device')">
+                            <div class="step-card-header">
+                                <div class="step-icon device-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+                                        <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+                                        <line x1="6" y1="6" x2="6.01" y2="6"></line>
+                                        <line x1="6" y1="18" x2="6.01" y2="18"></line>
+                                    </svg>
+                                </div>
+                                <span class="step-badge">Step 1</span>
+                            </div>
+                            <div class="step-card-body">
+                                <h3>Select Device</h3>
+                                <p>Choose your hardware type and manufacturer to initialize the configuration</p>
+                            </div>
+                            <div class="step-card-footer">
+                                <span class="nav-arrow">→</span>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Protocol -->
+                        <div class="home-step-card" onclick="window.router.navigate('protocol')">
+                            <div class="step-card-header">
+                                <div class="step-icon protocol-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="16 18 22 12 16 6"></polyline>
+                                        <polyline points="8 6 2 12 8 18"></polyline>
+                                    </svg>
+                                </div>
+                                <span class="step-badge">Step 2</span>
+                            </div>
+                            <div class="step-card-body">
+                                <h3>Configure Protocol</h3>
+                                <p>Set up RTU or TCP communication parameters for data exchange</p>
+                            </div>
+                            <div class="step-card-footer">
+                                <span class="nav-arrow">→</span>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Connections -->
+                        <div class="home-step-card" onclick="window.router.navigate('connections')">
+                            <div class="step-card-header">
+                                <div class="step-icon connect-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                                        <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+                                        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                                        <line x1="12" y1="20" x2="12.01" y2="20"></line>
+                                    </svg>
+                                </div>
+                                <span class="step-badge">Step 3</span>
+                            </div>
+                            <div class="step-card-body">
+                                <h3>Network & Cloud</h3>
+                                <p>Connect to WiFi networks and configure MQTT cloud messaging</p>
+                            </div>
+                            <div class="step-card-footer">
+                                <span class="nav-arrow">→</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats / Status -->
+                    <div class="home-status-bar">
+                        <div class="status-item">
+                            <span class="status-label">Configuration</span>
+                            <span class="status-value" id="home-status-config">Not Started</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Steps Completed</span>
+                            <span class="status-value" id="home-status-steps">0/3</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DEVICE SELECTION VIEW -->
+            <section id="view-device" class="view hidden">
+                <div class="view-header">
+                    <h2>Device Selection</h2>
+                    <p>Select the hardware type and manufacturer to initialize configuration.</p>
+                </div>
+
+                <div class="card">
+                    <form id="device-form">
+                        <div id="device-step-1" class="form-step">
+                            <div class="form-group">
+                                <label>Device Type</label>
+                                <select id="device-type">
+                                    <option value="">-- Select Type --</option>
+                                    <option value="energy">Energy Meter</option>
+                                    <option value="flow">Flow Meter</option>
+                                </select>
+                            </div>
+                            <div id="device-next-container" class="actions">
+                                <button type="button" id="btn-device-next" class="btn-primary">Next</button>
+                            </div>
+                        </div>
+
+                        <div id="device-step-2" class="form-step hidden">
+                            <div class="form-group">
+                                <label>Manufacturer</label>
+                                <select id="device-manufacturer">
+                                    <option value="">-- Select Manufacturer --</option>
+                                    <!-- Populated dynamically -->
+                                </select>
+                            </div>
+                            <div class="actions">
+                                <button type="button" id="btn-device-back" class="btn-secondary">Back</button>
+                                <button type="submit" id="btn-device-save" class="btn-primary">Save Selection</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="summary-device" class="summary-box hidden">
+                    <h3>✅ Configuration Saved</h3>
+                    <div class="summary-content"></div>
+                </div>
+            </section>
+
+            <!-- PROTOCOL CONFIG VIEW -->
+            <section id="view-protocol" class="view hidden">
+                <div class="view-header">
+                    <h2>Protocol Configuration</h2>
+                    <p>Configure communication parameters for read/write operations.</p>
+                </div>
+
+                <!-- Protocol Selection View -->
+                <div id="protocol-select" class="protocol-select">
+                    <div class="grid-2">
+                        <button class="card p-4" onclick="window.protocolNav('rtu')">
+                            <h3>RTU</h3>
+                            <p>Remote Terminal Unit</p>
+                        </button>
+                        <button class="card p-4" onclick="window.protocolNav('tcp')">
+                            <h3>TCP</h3>
+                            <p>Transmission Control Protocol</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- RTU Section -->
+                <div id="proto-rtu" class="proto-section hidden">
+                    <button class="btn-outline btn-sm mb-4" onclick="window.protocolNav('back')">← Back to Protocol
+                        Selection</button>
+                    <div class="card">
+                        <h3>RTU Parameters</h3>
+                        <div class="table-container">
+                            <table id="rtu-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Slave ID</th>
+                                        <th>Baud Rate</th>
+                                        <th>Parity</th>
+                                        <th>Data Bits</th>
+                                        <th>Stop Bits</th>
+                                        <th>Func Code</th>
+                                        <th>Slave Address</th>
+                                        <th>Quantity</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dynamic Rows -->
+                                </tbody>
+                            </table>
+                            <button type="button" id="add-rtu-row" class="btn-secondary dashed mt-3">+ Add Row</button>
+                        </div>
+                        <div class="actions">
+                            <button id="save-rtu" class="btn-primary">Save RTU Config</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TCP Section -->
+                <div id="proto-tcp" class="proto-section hidden">
+                    <button class="btn-outline btn-sm mb-4" onclick="window.protocolNav('back')">← Back to Protocol
+                        Selection</button>
+                    <div class="card">
+                        <h3>TCP Parameters</h3>
+                        <div class="table-container">
+                            <table id="tcp-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>IP Address</th>
+                                        <th>Port</th>
+                                        <th>Gateway</th>
+                                        <th>Func Code</th>
+                                        <th>Slave ID</th>
+                                        <th>Slave Address</th>
+                                        <th>Quantity</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dynamic Rows -->
+                                </tbody>
+                            </table>
+                            <button type="button" id="add-tcp-row" class="btn-secondary dashed mt-3">+ Add Row</button>
+                        </div>
+                        <div class="actions">
+                            <button id="save-tcp" class="btn-primary">Save TCP Config</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="summary-protocol" class="summary-box hidden">
+                    <h3>✅ Configuration Saved</h3>
+                    <div class="summary-content"></div>
+                </div>
+            </section>
+
+            <!-- CONNECTIONS VIEW -->
+            <!-- CONNECTIONS VIEW -->
+            <section id="view-connections" class="view hidden">
+                <div class="view-header">
+                    <h2>Connections</h2>
+                    <p>Setup Network Connectivity and Cloud Messaging.</p>
+                </div>
+
+                <!-- 1. Connection Type Toggle -->
+                <div class="conn-type-toggle" style="margin-bottom: 32px;">
+                    <button id="btn-show-http" class="toggle-card">
+                        <div class="icon">🌐</div>
+                        <h3>HTTP</h3>
+                        <p>Web Protocol Access</p>
+                    </button>
+                    <button id="btn-show-mqtt" class="toggle-card">
+                        <div class="icon">☁️</div>
+                        <h3>MQTT</h3>
+                        <p>Cloud Messaging</p>
+                    </button>
+                </div>
+
+                <!-- ========================== -->
+                <!-- WiFi Workflow              -->
+                <!-- ========================== -->
+                <!-- HTTP Placeholder (No form) -->
+                <div id="conn-http-container" class="card hidden">
+                    <p style="text-align: center; opacity: 0.6; padding: 20px;">HTTP configuration is not available in
+                        this version.</p>
+                </div>
+
+                <!-- ========================== -->
+                <!-- MQTT Workflow (Wizard)     -->
+                <!-- ========================== -->
+                <div id="conn-mqtt-container" class="card hidden">
+
+                    <!-- Step 1: Platform Selection -->
+                    <div id="mqtt-step-1" class="wizard-step">
+                        <h3 style="margin-bottom:16px;">Step 1: Select MQTT Platform</h3>
+                        <div class="platform-grid">
+                            <button type="button" class="platform-card" data-platform="boodskap">
+                                <strong>Boodskap</strong>
+                                <small>IoT Platform</small>
+                            </button>
+                            <button type="button" class="platform-card" data-platform="chakra">
+                                <strong>Chakra</strong>
+                                <small>Edge Gateway</small>
+                            </button>
+                            <button type="button" class="platform-card" data-platform="3rdparty">
+                                <strong>Third Party</strong>
+                                <small>AWS / Azure / HiveMQ</small>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Connection Details -->
+                    <div id="mqtt-step-2" class="wizard-step hidden">
+                        <h3 style="margin-bottom:16px;">Step 2: Broker Connection</h3>
+                        <form id="mqtt-details-form">
+                            <div class="form-group">
+                                <label>Environment</label>
+                                <select id="mqtt-env">
+                                    <option value="testing">Testing (Sandbox)</option>
+                                    <option value="production">Production</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Broker Address (URL / IP)</label>
+                                <input type="text" id="mqtt-broker" placeholder="mqtt.example.com" required>
+                            </div>
+                            <div class="grid-2">
+                                <div class="form-group">
+                                    <label>Username</label>
+                                    <input type="text" id="mqtt-user">
+                                </div>
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <div class="password-group">
+                                        <input type="password" id="mqtt-pass">
+                                        <button type="button" class="password-toggle"
+                                            onclick="window.togglePassword(this)">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="actions">
+                                <button type="button" id="btn-mqtt-back-1" class="btn-secondary">Back</button>
+                                <button type="submit" class="btn-primary">Next</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Step 3: Device ID -->
+                    <div id="mqtt-step-3" class="wizard-step hidden">
+                        <h3 style="margin-bottom:16px;">Step 3: Device Identification</h3>
+                        <p style="margin-bottom:24px; color:hsl(var(--ue-text-muted));">Enter the Unique Device ID to
+                            register this device with the cloud.</p>
+                        <form id="mqtt-device-form">
+                            <div class="form-group">
+                                <label>Device ID</label>
+                                <input type="text" id="mqtt-device-id" placeholder="e.g. zedbee_12345" required>
+                            </div>
+                            <div class="actions">
+                                <button type="button" id="btn-mqtt-back-2" class="btn-secondary">Back</button>
+                                <button type="submit" class="btn-primary">OK</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Step 4: Topics -->
+                    <div id="mqtt-step-4" class="wizard-step hidden">
+                        <h3 style="margin-bottom:16px;">Step 4: Topic Configuration</h3>
+                        <p style="margin-bottom:24px; color:hsl(var(--ue-text-muted));">Topics have been auto-generated
+                            based on your Device ID. Verify and save.</p>
+                        <form id="mqtt-topics-form">
+                            <div class="form-group">
+                                <label>Publish Topic</label>
+                                <input type="text" id="mqtt-pub" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Subscribe Topic</label>
+                                <input type="text" id="mqtt-sub" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Acknowledgement Topic</label>
+                                <input type="text" id="mqtt-ack" required>
+                            </div>
+                            <div class="actions">
+                                <button type="button" id="btn-mqtt-back-3" class="btn-secondary">Back</button>
+                                <button type="submit" class="btn-primary">Save MQTT Configuration</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Summary Box -->
+                <div id="summary-connections" class="summary-box hidden">
+                    <h3>✅ Saved Successfully</h3>
+                    <div class="summary-content"></div>
+                </div>
+            </section>
+
+            <!-- SETTINGS VIEW -->
+            <section id="view-settings" class="view hidden">
+                <div class="view-header">
+                    <h2>Settings</h2>
+                    <p>Manage account security and application preferences.</p>
+                </div>
+
+                <div class="card small-card">
+                    <h3>Change Password</h3>
+                    <form id="settings-form">
+                        <div class="form-group">
+                            <label>Current Password</label>
+                            <div class="password-group">
+                                <input type="password" id="set-curr-pass" required>
+                                <button type="button" class="password-toggle" onclick="window.togglePassword(this)">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>New Password</label>
+                            <div class="password-group">
+                                <input type="password" id="set-new-pass" required>
+                                <button type="button" class="password-toggle" onclick="window.togglePassword(this)">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <button type="submit" class="btn-danger">Update Password</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/store.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
