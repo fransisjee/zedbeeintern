@@ -9,6 +9,13 @@
     - [ ] `css/style.css`: Design system (Variables, Typography, Animations)
     - [ ] `js/store.js`: State Management & LocalStorage
     - [ ] `js/router.js`: Navigation & View Management
+    - [x] Analyze `store.js` and `server.js` for cleanup
+
+- [x] Remove comments and condense `store.js`
+- [x] Remove comments and condense `server.js`
+- [x] Check other files if needed
+- [ ] Remove Node.js backend files [/]
+- [ ] Start Python backend [ ]
 
 - [ ] Features & Views
     - [ ] **Login**: Auth logic & UI
