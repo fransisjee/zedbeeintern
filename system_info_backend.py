@@ -7,6 +7,15 @@ import time
 app = Flask(__name__)
 CORS(app)
 
+@app.route("/")
+def home():
+    return jsonify({
+        "status": "ZedBee System Info Backend is running",
+        "endpoints": {
+            "system_info": "/system-info"
+        }
+    })
+
 @app.route("/system-info")
 def system_info():
     boot_time = psutil.boot_time()
@@ -29,4 +38,4 @@ def system_info():
     })
 
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

@@ -1410,13 +1410,13 @@ td select {
     color: hsl(var(--ue-primary));
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1024px) {
     .home-steps-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     .home-steps-grid {
         grid-template-columns: 1fr;
     }
