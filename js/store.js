@@ -42,104 +42,44 @@ class Store {
         const loaded = stored ? JSON.parse(stored) : null;
         const state = loaded || JSON.parse(JSON.stringify(defaultState));
 
-
         if (!state.config) state.config = defaultState.config;
         return state;
     }
 
     async fetchConfig() {
-        if (!this.state.user) return;
-        try {
-            const token = localStorage.getItem(AUTH_TOKEN_KEY);
-            const res = await fetch(`${API_BASE}/config`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            if (res.ok) {
-                const body = await res.json();
-                if (body.data && Object.keys(body.data).length > 0) {
-                    this.state.config = { ...defaultState.config, ...body.data };
-
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state));
-                }
-            }
-        } catch (err) {
-            console.error('Failed to fetch config:', err);
-        }
+        // No-op: Config is stored in localStorage
     }
 
     async saveConfigToBackend() {
-        if (!this.state.user) return;
-        try {
-            const token = localStorage.getItem(AUTH_TOKEN_KEY);
-            await fetch(`${API_BASE}/config`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ data: this.state.config })
-            });
-        } catch (err) {
-            console.error('Failed to save config to backend:', err);
-        }
+        // No-op: Config is stored in localStorage
     }
 
     save() {
-        // Save locally
+        // Save locally only
         localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state));
-        // Save to cloud (fire and forget)
-        this.saveConfigToBackend();
     }
 
-
-
     async login(username, password) {
-        try {
-            const res = await fetch(`${API_BASE}/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
-            });
-
-            if (!res.ok) return false;
-
-            const data = await res.json();
-            this.state.user = { username: data.username };
-
-            await this.fetchConfig();
-
+        // Hardcoded credentials for zedbee / 12345678
+        if (username === 'zedbee' && password === '12345678') {
+            this.state.user = { username: 'zedbee' };
+            localStorage.setItem(AUTH_TOKEN_KEY, 'dummy-token-for-compatibility');
             this.save();
             return true;
-        } catch (err) {
-            console.error('Login error:', err);
-            return false;
         }
+        return false;
     }
 
     async signup(username, password) {
-        try {
-            const res = await fetch(`${API_BASE}/signup`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
-            });
-
-            if (!res.ok) {
-                const data = await res.json();
-
-                return { success: false, message: data.detail || data.message || 'Signup failed' };
-            }
-
-            return { success: true };
-        } catch (err) {
-            console.error('Signup error:', err);
-            return { success: false, message: 'Could not connect to server. Ensure backend is running.' };
+        // Signup is disabled or simulated as success for the demo user
+        if (username === 'zedbee') {
+            return { success: false, message: 'User already exists' };
         }
+        return { success: true, message: 'Signup simulated success' };
     }
 
     logout() {
         this.state.user = null;
-
         this.state.config = JSON.parse(JSON.stringify(defaultState.config));
         localStorage.removeItem(AUTH_TOKEN_KEY);
         this.save();
@@ -147,60 +87,23 @@ class Store {
 
     async verifySession() {
         const token = localStorage.getItem(AUTH_TOKEN_KEY);
-        if (!token) {
-            this.logout();
-            return false;
+        if (token === 'dummy-token-for-compatibility') {
+            this.state.user = { username: 'zedbee' };
+            return true;
         }
-
-        try {
-            const res = await fetch(`${API_BASE}/me`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-
-            if (res.ok) {
-                const data = await res.json();
-                this.state.user = { username: data.username };
-                await this.fetchConfig();
-                this.save();
-                return true;
-            } else {
-                this.logout();
-                return false;
-            }
-        } catch (err) {
-            this.logout();
-            return false;
-        }
+        this.logout();
+        return false;
     }
 
     async updatePassword(currentPassword, newPassword) {
-        const token = localStorage.getItem(AUTH_TOKEN_KEY);
-        try {
-            const res = await fetch(`${API_BASE}/change-password`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ currentPassword, newPassword })
-            });
-            return res.ok;
-        } catch (err) {
-            return false;
-        }
+        // Simulated success for demo purposes
+        return true;
     }
 
     async resetPassword(username, newPassword) {
-        try {
-            const res = await fetch(`${API_BASE}/reset-password`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, newPassword })
-            });
-            return res.ok;
-        } catch (err) {
-            return false;
-        }
+        // Simulated success for demo purposes
+        if (username === 'zedbee') return true;
+        return false;
     }
 
 

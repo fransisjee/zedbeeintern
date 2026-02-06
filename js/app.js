@@ -49,6 +49,8 @@ class Router {
             document.getElementById('user-display').textContent = store.state.user.username;
             refreshSummaries();
             if (viewId === 'home') updateHomeStatus();
+            if (viewId === 'system-info') startSystemInfoPolling();
+            else stopSystemInfoPolling();
         }
     }
 
@@ -621,6 +623,63 @@ function initConnections() {
     });
 }
 
+// --- System Info Controller ---
+let sysInfoInterval = null;
+
+function initSystemInfo() {
+    // Initial fetch if active
+    if (!document.getElementById('view-system-info').classList.contains('hidden')) {
+        startSystemInfoPolling();
+    }
+}
+
+function startSystemInfoPolling() {
+    if (sysInfoInterval) return;
+    fetchSystemInfo(); // Immediate call
+    sysInfoInterval = setInterval(fetchSystemInfo, 3000);
+}
+
+function stopSystemInfoPolling() {
+    if (sysInfoInterval) {
+        clearInterval(sysInfoInterval);
+        sysInfoInterval = null;
+    }
+}
+
+async function fetchSystemInfo() {
+    try {
+        const res = await fetch('http://localhost:5000/system-info');
+        if (!res.ok) throw new Error('Failed to fetch system info');
+        const data = await res.json();
+        updateSystemInfoUI(data);
+    } catch (err) {
+        console.error('System Info Fetch Error:', err);
+    }
+}
+
+function updateSystemInfoUI(data) {
+    const set = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
+    };
+
+    set('sys-os', data.os);
+    set('sys-hostname', data.hostname);
+    set('sys-cpu', `${data.cpu_percent}%`);
+    set('sys-ram', `${data.ram_percent}% (${data.ram_used} / ${data.ram_total} GB)`);
+    set('sys-disk', `${data.disk_percent}%`);
+    set('sys-uptime', formatUptime(data.uptime_minutes));
+    set('sys-reboot', data.last_reboot);
+    set('sys-sent', `${data.net_sent} MB`);
+    set('sys-recv', `${data.net_recv} MB`);
+}
+
+function formatUptime(mins) {
+    const h = Math.floor(mins / 60);
+    const m = mins % 60;
+    return h > 0 ? `${h}h ${m}m` : `${m}m`;
+}
+
 // --- Settings Controller ---
 function initSettings() {
     const form = document.getElementById('settings-form');
@@ -696,6 +755,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initProtocol();
     initConnections();
     initSettings();
+    initSystemInfo();
 
     window.router.navigate(store.state.user ? 'home' : 'login');
 });
