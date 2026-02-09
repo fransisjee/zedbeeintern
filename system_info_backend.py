@@ -4,14 +4,66 @@ import psutil
 import platform
 import time
 import socket
-import uuid
 
 app = Flask(__name__)
 CORS(app)
 
-# ----------------------------
-# ROOT CHECK (backend status)
-# ----------------------------
+
+# ---------------------------------------
+# Helper: Get Active Network Info
+# ---------------------------------------
+def get_network_info():
+    ip_address = "N/A"
+    mac_address = "N/A"
+    try:
+        interfaces = psutil.net_if_addrs()
+        stats = psutil.net_if_stats()
+
+        for interface_name, addrs in interfaces.items():
+            name_l = interface_name.lower()
+            # Skip loopback and common virtual adapters
+            if name_l.startswith("lo") or "virtual" in name_l or "docker" in name_l or name_l.startswith("veth") or "vm" in name_l:
+                continue
+
+            # Skip interfaces that are down
+            if interface_name in stats and not stats[interface_name].isup:
+                continue
+
+            for addr in addrs:
+                fam = getattr(addr, 'family', None)
+                # IPv4 address
+                if fam == socket.AF_INET:
+                    if addr.address and not addr.address.startswith("127.") and not addr.address.startswith("169.254."):
+                        ip_address = addr.address
+
+                # MAC address - handle platform differences
+                if fam == getattr(psutil, 'AF_LINK', None) or fam == getattr(socket, 'AF_PACKET', None) or fam == -1:
+                    if addr.address and len(addr.address.strip()) > 0:
+                        mac = addr.address.replace('-', ':').lower()
+                        if mac != "00:00:00:00:00:00":
+                            mac_address = mac
+
+            # If we have both IP and MAC from the same interface, stop
+            if ip_address != "N/A" and mac_address != "N/A":
+                break
+    except Exception:
+        pass
+
+    # Fallback: if MAC still not found, use uuid.getnode()
+    if mac_address == "N/A":
+        try:
+            import uuid as _uuid
+            node = _uuid.getnode()
+            mac_address = ':'.join(['{:02x}'.format((node >> ele) & 0xff) for ele in range(0, 8 * 6, 8)][::-1])
+        except Exception:
+            pass
+
+    return ip_address, mac_address
+
+
+# ---------------------------------------
+# Root Endpoint
+# ---------------------------------------
 @app.route("/")
 def home():
     return jsonify({
@@ -22,9 +74,9 @@ def home():
     })
 
 
-# ----------------------------
-# SYSTEM INFO API
-# ----------------------------
+# ---------------------------------------
+# System Info Endpoint
+# ---------------------------------------
 @app.route("/system-info")
 def system_info():
     boot_time = psutil.boot_time()
@@ -34,49 +86,14 @@ def system_info():
     disk = psutil.disk_usage('/')
     net = psutil.net_io_counters()
 
-    hostname = socket.gethostname()
-    
-    # Get actual system network interface IP and MAC
-    ip_address = "N/A"
-    mac_address = "N/A"
-    
-    try:
-        interfaces = psutil.net_if_addrs()
-        for interface_name, addrs in interfaces.items():
-            # Skip loopback
-            if interface_name.lower() in ['lo', 'lo0']:
-                continue
-            for addr in addrs:
-                if addr.family == socket.AF_INET:
-                    ip_address = addr.address
-                    break
-            if ip_address != "N/A":
-                break
-        
-        if_stats = psutil.net_if_stats()
-        for interface_name, stats in if_stats.items():
-            if interface_name.lower() in ['lo', 'lo0']:
-                continue
-            if stats.isup:
-                try:
-                    mac = psutil.net_if_addrs().get(interface_name)
-                    for addr in psutil.net_if_addrs().get(interface_name, []):
-                        if addr.family == psutil.AF_LINK:
-                            mac_address = addr.address
-                            break
-                except:
-                    pass
-                if mac_address != "N/A":
-                    break
-    except:
-        pass
+    ip_address, mac_address = get_network_info()
 
     return jsonify({
         # OS INFO
         "os": platform.system(),
         "os_release": platform.release(),
         "kernel": platform.version(),
-        "hostname": hostname,
+        "hostname": socket.gethostname(),
 
         # CPU
         "cpu_percent": psutil.cpu_percent(interval=1),
@@ -100,12 +117,15 @@ def system_info():
 
         # TIME
         "uptime_minutes": round(uptime / 60),
-        "last_reboot": time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(boot_time))
+        "last_reboot": time.strftime(
+            '%Y-%m-%d %H:%M:%S',
+            time.localtime(boot_time)
+        )
     })
 
 
-# ----------------------------
-# RUN SERVER
-# ----------------------------
+# ---------------------------------------
+# Run Server
+# ---------------------------------------
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
