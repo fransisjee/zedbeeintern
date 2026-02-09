@@ -35,10 +35,41 @@ def system_info():
     net = psutil.net_io_counters()
 
     hostname = socket.gethostname()
-    ip_address = socket.gethostbyname(hostname)
-
-    mac_address = ':'.join(['{:02x}'.format((uuid.getnode() >> ele) & 0xff)
-                             for ele in range(0, 8 * 6, 8)][::-1])
+    
+    # Get actual system network interface IP and MAC
+    ip_address = "N/A"
+    mac_address = "N/A"
+    
+    try:
+        interfaces = psutil.net_if_addrs()
+        for interface_name, addrs in interfaces.items():
+            # Skip loopback
+            if interface_name.lower() in ['lo', 'lo0']:
+                continue
+            for addr in addrs:
+                if addr.family == socket.AF_INET:
+                    ip_address = addr.address
+                    break
+            if ip_address != "N/A":
+                break
+        
+        if_stats = psutil.net_if_stats()
+        for interface_name, stats in if_stats.items():
+            if interface_name.lower() in ['lo', 'lo0']:
+                continue
+            if stats.isup:
+                try:
+                    mac = psutil.net_if_addrs().get(interface_name)
+                    for addr in psutil.net_if_addrs().get(interface_name, []):
+                        if addr.family == psutil.AF_LINK:
+                            mac_address = addr.address
+                            break
+                except:
+                    pass
+                if mac_address != "N/A":
+                    break
+    except:
+        pass
 
     return jsonify({
         # OS INFO
