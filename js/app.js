@@ -663,15 +663,17 @@ function updateSystemInfoUI(data) {
         if (el) el.textContent = val;
     };
 
-    set('sys-os', data.os);
+    set('sys-os-kernel', `${data.os} (${data.os_release}) | ${data.kernel}`);
     set('sys-hostname', data.hostname);
     set('sys-cpu', `${data.cpu_percent}%`);
-    set('sys-ram', `${data.ram_percent}% (${data.ram_used} / ${data.ram_total} GB)`);
-    set('sys-disk', `${data.disk_percent}%`);
+    set('sys-ram-details', `${data.ram_used_gb} / ${data.ram_total_gb} GB (${data.ram_percent}%)`);
+    set('sys-disk-details', `${data.disk_free_gb} GB Free / ${data.disk_total_gb} GB Total`);
+    set('sys-ip', data.ip_address);
+    set('sys-mac', data.mac_address);
     set('sys-uptime', formatUptime(data.uptime_minutes));
     set('sys-reboot', data.last_reboot);
-    set('sys-sent', `${data.net_sent} MB`);
-    set('sys-recv', `${data.net_recv} MB`);
+    set('sys-sent', `${data.net_sent_mb} MB`);
+    set('sys-recv', `${data.net_recv_mb} MB`);
 }
 
 function formatUptime(mins) {

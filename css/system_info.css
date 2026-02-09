@@ -64,7 +64,9 @@
 .os-icon,
 .host-icon,
 .reboot-icon,
-.sent-icon {
+.sent-icon,
+.ip-icon,
+.mac-icon {
     background: rgba(58, 134, 255, 0.15);
     color: #3a86ff;
 }
