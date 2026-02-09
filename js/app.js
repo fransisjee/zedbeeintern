@@ -663,7 +663,8 @@ function updateSystemInfoUI(data) {
         if (el) el.textContent = val;
     };
 
-    set('sys-os-kernel', `${data.os} (${data.os_release}) | ${data.kernel}`);
+    set('sys-os-release', data.os);
+    set('sys-kernel', data.kernel);
     set('sys-hostname', data.hostname);
     set('sys-cpu', `${data.cpu_percent}%`);
     set('sys-ram-details', `${data.ram_used_gb} / ${data.ram_total_gb} GB (${data.ram_percent}%)`);
